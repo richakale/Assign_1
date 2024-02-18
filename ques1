@@ -1,0 +1,120 @@
+import java.util.Scanner;
+
+class Node {
+    String name;
+    int marks;
+    Node next;
+
+    Node(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+        this.next = null;
+    }
+}
+
+class Stack {
+    private Node top;
+
+    Stack() {
+        this.top = null;
+    }
+
+    void push(String name, int marks) {
+        Node newNode = new Node(name, marks);
+        if (top == null || newNode.marks > top.marks) {
+            newNode.next = top;
+            top = newNode;
+        } else {
+            Node temp = top;
+            while (temp.next != null && temp.next.marks >= newNode.marks) {
+                temp = temp.next;
+            }
+            newNode.next = temp.next;
+            temp.next = newNode;
+        }
+    }
+
+    void pop() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+            return;
+        }
+        System.out.println("Student " + top.name + " with marks " + top.marks + " removed from stack.");
+        top = top.next;
+    }
+
+    void display() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+            return;
+        }
+        Node temp = top;
+        System.out.println("Students in the stack:");
+        while (temp != null) {
+            System.out.println("Name: " + temp.name + ", Marks: " + temp.marks);
+            temp = temp.next;
+        }
+    }
+
+    void displayTop3() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+            return;
+        }
+        Node temp = top;
+        int count = 1;
+        System.out.println("Top 3 students:");
+        while (temp != null && count <= 3) {
+            System.out.println("Position " + count + ": Name: " + temp.name + ", Marks: " + temp.marks);
+            temp = temp.next;
+            count++;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Stack stack = new Stack();
+
+        int choice = 0;
+        while (true) {
+            System.out.println("\nChoose an operation:");
+            System.out.println("1. Add a student to Stack");
+            System.out.println("2. Remove a Student from the Stack");
+            System.out.println("3. Display all students of Stack");
+            System.out.println("4. Display the top 3 positions of students");
+            System.out.println("5. Press any other key to close the program");
+
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+            } else {
+                break;
+            }
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter student name:");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter student marks:");
+                    int marks = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    stack.push(name, marks);
+                    break;
+                case 2:
+                    stack.pop();
+                    break;
+                case 3:
+                    stack.display();
+                    break;
+                case 4:
+                    stack.displayTop3();
+                    break;
+                default:
+                    return;
+            }
+        }
+        scanner.close();
+    }
+}
